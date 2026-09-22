@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Focus Factor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14283D;
+    --ink-soft: #1C3550;
+    --paper: #EAF3FB;
+    --paper-2: #DBEAF7;
+    --paper-3: #C4DDF3;
+    --brass: #2E6F9E;
+    --brass-dark: #21587F;
+    --text: #16283D;
+    --text-soft: #4C6478;
+    --on-ink: #EAF3FB;
+    --on-ink-soft: #A9C3DA;
+    --rule: rgba(22, 40, 61, 0.13);
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #0C1B2A;
+      --ink-soft: #142639;
+      --paper: #0F2036;
+      --paper-2: #16304A;
+      --paper-3: #1E3D5C;
+      --brass: #6FB1E0;
+      --brass-dark: #4E8CBF;
+      --text: #E7F1FB;
+      --text-soft: #A9C3DA;
+      --on-ink: #E7F1FB;
+      --on-ink-soft: #93AFC9;
+      --rule: rgba(231, 241, 251, 0.14);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #0C1B2A;
+    --ink-soft: #142639;
+    --paper: #0F2036;
+    --paper-2: #16304A;
+    --paper-3: #1E3D5C;
+    --brass: #6FB1E0;
+    --brass-dark: #4E8CBF;
+    --text: #E7F1FB;
+    --text-soft: #A9C3DA;
+    --on-ink: #E7F1FB;
+    --on-ink-soft: #93AFC9;
+    --rule: rgba(231, 241, 251, 0.14);
+  }
+
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .serif {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.15;
+    margin: 0;
+  }
+  a { color: inherit; }
+  img { max-width: 100%; display: block; }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* Header */
+  header.site {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .site-nav {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .site-mark {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 1.15rem;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+  }
+  .site-links {
+    display: flex;
+    gap: 22px;
+    font-size: 0.95rem;
+  }
+  .site-links a { text-decoration: none; color: var(--text-soft); border-bottom: 1px solid transparent; }
+  .site-links a:hover { color: var(--text); border-bottom-color: var(--brass); }
+
+  /* Hero */
+  .hero {
+    padding: 72px 0 56px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    max-width: 14ch;
+    letter-spacing: -0.01em;
+  }
+  .hero p.lede {
+    margin-top: 22px;
+    max-width: 54ch;
+    font-size: 1.15rem;
+    color: var(--text-soft);
+  }
+  .hero-meta {
+    margin-top: 32px;
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    font-size: 0.92rem;
+    color: var(--text-soft);
+  }
+  .hero-meta strong {
+    display: block;
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.5rem;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* Section headers */
+  .section {
+    padding: 64px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+  .section-head h2 {
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+  }
+  .section-head p {
+    margin: 8px 0 0;
+    color: var(--text-soft);
+    max-width: 50ch;
+  }
+
+  /* Blog catalog */
+  .catalog {
+    display: grid;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .card {
+    background: var(--paper);
+    padding: 26px 28px;
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 20px;
+    align-items: start;
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+  .card:hover { background: var(--paper-2); }
+  .card .num {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.05rem;
+    color: var(--brass);
+    padding-top: 2px;
+  }
+  .card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  .card p {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 0.98rem;
+  }
+  .card .tag {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 0.82rem;
+    color: var(--brass-dark);
+  }
+
+  /* Podcast */
+  .episodes {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .episode {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    gap: 20px;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .episode:last-child { border-bottom: none; }
+  .episode .num {
+    font-family: 'Source Serif 4', serif;
+    color: var(--brass);
+    font-size: 1.05rem;
+  }
+  .episode h3 {
+    font-size: 1.05rem;
+    margin-bottom: 4px;
+  }
+  .episode p {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 0.92rem;
+  }
+
+  .spotify-panel {
+    margin-top: 40px;
+    background: var(--ink);
+    color: var(--on-ink);
+    border-radius: 6px;
+    padding: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .spotify-panel h3 {
+    color: var(--on-ink);
+    font-size: 1.25rem;
+    margin-bottom: 6px;
+  }
+  .spotify-panel p {
+    margin: 0;
+    color: var(--on-ink-soft);
+    font-size: 0.92rem;
+    max-width: 40ch;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--brass);
+    color: var(--on-ink);
+    padding: 12px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    transition: background 0.15s ease;
+  }
+  .btn:hover { background: var(--brass-dark); }
+  .btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* Footer */
+  footer.site {
+    padding: 40px 0 60px;
+    color: var(--text-soft);
+    font-size: 0.88rem;
+  }
+  footer.site .wrap {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .hero { padding: 48px 0 40px; }
+    .section { padding: 48px 0; }
+    .card { grid-template-columns: 32px 1fr; padding: 22px 20px; }
+    .episode { grid-template-columns: 28px 1fr; }
+    .episode .btn-mini { grid-column: 1 / -1; }
+    .spotify-panel { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--brass);
+    outline-offset: 2px;
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap site-nav">
+    <a class="site-mark" href="#top">The Focus Factor</a>
+    <nav class="site-links">
+      <a href="#blog">Blog</a>
+      <a href="#podcast">Podcast</a>
+      <a href="#about">About</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <h1>Where we study shapes how we study.</h1>
+    <p class="lede">A high school research project on libraries, coffee shops, and home desks — and what each one quietly does to focus, motivation, and how much actually gets done.</p>
+  </div>
+</section>
+
+<section class="section" id="blog">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>The blog</h2>
+        <p>An ongoing series working through the project — the question, the research, the method, what the data showed, and whatever comes next.</p>
+      </div>
+    </div>
+
+    <div class="catalog">
+      <a class="card" href="#">
+        <span class="num">01</span>
+        <span>
+          <h3>Why I studied this</h3>
+          <p>The problem with how we usually talk about "study environments" — and the gap in the research nobody had filled yet.</p>
+          <span class="tag">Introduction</span>
+        </span>
+      </a>
+      <a class="card" href="#">
+        <span class="num">02</span>
+        <span>
+          <h3>What the research already said</h3>
+          <p>Self-regulated learning, motivation, and why psychologists think external conditions matter more than we give them credit for.</p>
+          <span class="tag">Literature review</span>
+        </span>
+      </a>
+      <a class="card" href="#">
+        <span class="num">03</span>
+        <span>
+          <h3>Cognitive load 101</h3>
+          <p>Why your brain can only handle so much at once, and how a noisy room quietly steals the resources you need to actually learn.</p>
+          <span class="tag">Theory</span>
+        </span>
+      </a>
+      <a class="card" href="#">
+        <span class="num">04</span>
+        <span>
+          <h3>Noise, light, and temperature</h3>
+          <p>What decades of environmental psychology say about the physical conditions that help or hurt concentration.</p>
+          <span class="tag">Background</span>
+        </span>
+      </a>
+      <a class="card" href="#">
+        <span class="num">05</span>
+        <span>
+          <h3>Designing the study</h3>
+          <p>Library, coffee shop, home — how I picked the three environments and built a design that let students act as their own control group.</p>
+          <span class="tag">Methodology</span>
+        </span>
+      </a>
+      <a class="card" href="#">
+        <span class="num">06</span>
+        <span>
+          <h3>Recruiting real students</h3>
+          <p>What it took to get 86 high schoolers to fill out a survey, and 19 of them to sit through three full study sessions.</p>
+          <span class="tag">Behind the scenes</span>
+        </span>
+      </a>
+      <a class="card" href="#">
+        <span class="num">07</span>
+        <span>
+          <h3>What 86 students said they needed</h3>
+          <p>The general survey results — where students think they focus best, and where they actually study most often.</p>
+          <span class="tag">Survey results</span>
+        </span>
+      </a>
+      <a class="card" href="#">
+        <span class="num">08</span>
+        <span>
+          <h3>What actually happened</h3>
+          <p>The experimental results: motivation and productivity scores across all three environments, and why the differences held up statistically.</p>
+          <span class="tag">Experiment results</span>
+        </span>
+      </a>
+      <a class="card" href="#">
+        <span class="num">09</span>
+        <span>
+          <h3>The coffee shop paradox</h3>
+          <p>Why the environment students found most motivating was also the one where they got the least done.</p>
+          <span class="tag">Key finding</span>
+        </span>
+      </a>
+      <a class="card" href="#">
+        <span class="num">10</span>
+        <span>
+          <h3>What this means for you</h3>
+          <p>Practical takeaways for choosing a study spot, plus what I'd want to test next.</p>
+          <span class="tag">Conclusion</span>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="podcast">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>The podcast</h2>
+        <p>Six longer conversations covering the same ground as the blog, in bigger chunks — good for a drive or a walk.</p>
+      </div>
+    </div>
+
+    <div class="episodes">
+      <div class="episode">
+        <span class="num">01</span>
+        <span>
+          <h3>The question behind the project</h3>
+          <p>Why study environments, and why high schoolers specifically.</p>
+        </span>
+      </div>
+      <div class="episode">
+        <span class="num">02</span>
+        <span>
+          <h3>The science of focus</h3>
+          <p>Cognitive load, motivation theory, and what past research got right — and missed.</p>
+        </span>
+      </div>
+      <div class="episode">
+        <span class="num">03</span>
+        <span>
+          <h3>Building the study</h3>
+          <p>Methodology, recruitment, and the ethics of running a study with minors.</p>
+        </span>
+      </div>
+      <div class="episode">
+        <span class="num">04</span>
+        <span>
+          <h3>The numbers</h3>
+          <p>A deep dive into the survey and experimental results.</p>
+        </span>
+      </div>
+      <div class="episode">
+        <span class="num">05</span>
+        <span>
+          <h3>The stories</h3>
+          <p>What students actually said about studying in each environment, in their own words.</p>
+        </span>
+      </div>
+      <div class="episode">
+        <span class="num">06</span>
+        <span>
+          <h3>So what?</h3>
+          <p>What the findings mean, their limits, and where this research could go next.</p>
+        </span>
+      </div>
+    </div>
+
+    <div class="spotify-panel">
+      <div>
+        <h3>Listen on Spotify</h3>
+        <p>Placeholder link — swap in your show's real Spotify URL once it's live.</p>
+      </div>
+      <a class="btn" href="https://open.spotify.com/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.14-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.48.659.301 1.019zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.72 1.621.539.3.719 1.02.42 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+        Open Spotify
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about" style="border-bottom: none;">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>About the project</h2>
+        <p style="max-width: 62ch;">This started as an AP Research project asking a simple question: does where a student studies actually change how motivated and productive they are? The answer, it turns out, is yes — and not always in the way students expect. This site breaks the full research paper into a blog series and a podcast, one piece at a time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <span>The Focus Factor</span>
+    <span>An independent research project</span>
+  </div>
+</footer>
+
+</body>
+</html>
